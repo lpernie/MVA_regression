@@ -1,0 +1,20 @@
+<flags   GENREFLEX_ARGS="--"/>
+<!-- Aggressive flags only for newer xeon/corei7 type machines with all sse extensions but no avx, eg newer batch workers at MIT -->
+<!--flags   CXXFLAGS="-O3 -ftree-loop-linear -floop-interchange -mmmx  -msse  -msse2 -msse3 -mssse3 -msse4.1 -msse4.2 -msse4 -fopenmp -march=corei7"/>
+
+<!-- Less aggressive flags for older core2 type cpus, ie svfnal01/02 at CERN -->
+<flags   CXXFLAGS="-O3 -ftree-loop-linear -floop-interchange -mmmx  -msse  -msse2 -msse3 -mssse3 -fopenmp -march=core2"/>
+
+<!-- Generic 'universal' flags -->
+<!--flags   CXXFLAGS="-O3 -ftree-loop-linear -floop-interchange -fopenmp"/>
+
+<!-- Very safe flags, with no multitreahding -->
+<!--flags   CXXFLAGS="-O3 -ftree-loop-linear -floop-interchange"/>
+
+<use   name="CondFormats/EgammaObjects"/>
+<use   name="rootrflx"/>
+<use   name="root"/>
+<use name="rootgraphics"/>
+<export>
+  <lib   name="1"/>
+</export>

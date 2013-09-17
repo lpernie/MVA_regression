@@ -1,0 +1,39 @@
+MVA regression:
+
+0) Intro:
+The porpouse of this tool is to get from MC information, the correction you need to apply to the gamma energy of the photons of the pi0 to correct for the materia/geometric effect.
+In this way you can disentangle this effect from the Inter-Calibration constants.
+
+1) Input file:
+First of all you need to get the input file with the TTree containg all the MC informations you nees.
+cmsStage /store/caf/user/lpernie/MVA_input/MVA_EtPi0_testing.root ./
+cmsStage /store/caf/user/lpernie/MVA_input/MVA_EtPi0_training.root ./
+You can use this or you can produce your own using the UserCode/lpernie/ECALpro/Pi0Analyzer/Analysis tools. Check these tool for more info.
+
+2) Computing the weight:
+you can send in batch the script to compute the correction to the gamma energy:
+bsub -q 1nd -o log1.log "source /afs/cern.ch/work/l/lpernie/ECALpro/CMSSW_5_3_0/src/mva_regression/SendBatch_gamma1.sh"
+this will give an output:  weights_Pi0_1/weight_Mediumtrain_EtPi0.root
+You can di that for gamma1/gamma2, or singleGamma. [the most/less energetic gamma from pi0 or for a single gamma Gun]
+
+3) Applying the weights:
+Than you want to apply these weight on the test:
+.x applyRegression.C+("MVA_EtPi0_testing.root","weights_Pi0_2/weight_Mediumtrain.root","TestPi02_Mediumtrain","./","100", "EB")
+or
+.x applyRegression.C+("MVA_ES_testing.root","weights_Pi0_1/weight_Mediumtrain_ES.root","TestPi01_Mediumtrain_ES","./","100","EE")
+it will give you a .root with the TTree of corrections.
+
+4) Plots:
+You can produce plots on the "test" giving the name of the root file without the .root, and the correction for the test without the .root.
+.x SeePlots.C+("LocalPi0Gun_testing","TestPi01_Mediumtrain_nTrees_100")
+or
+.x SeePlots_EE.C+("MVA_ES_testing","TestPi01_Mediumtrain_ES_nTrees_100")
+
+Once you have it for gamma1 and 2, you can see the improvement in the invariant mass.
+.x SeePlotsMass.C+("MVA_EtPi0_testing","TestPi01_Mediumtrain_nTrees_100", "TestPi02_Mediumtrain_nTrees_100", true) //False if is a eta
+.x SeePlotsMass_EE.C+("MVA_ES_testing","TestPi01_Mediumtrain_ES_nTrees_100", "TestPi02_Mediumtrain_ES_nTrees_100", true)
+
+4) For more questions: luca.pernie@cern.ch
+
+Best,
+LP
